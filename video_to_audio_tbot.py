@@ -30,6 +30,7 @@ async def on_chat_message(msg):
             'noplaylist': True,    # only download single song, not playlist
         }
         with youtube_dl.YoutubeDL (options) as ydl:
+            print("Please wait till video will be downloaded and uploaded to you back ;)")
             info_dict = ydl.extract_info (url, download=True)
             title = info_dict.get ('title', None)
             id = info_dict.get ('id', None)
