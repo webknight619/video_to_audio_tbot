@@ -54,8 +54,12 @@ async def on_chat_message(msg):
             os.system ("ffmpeg -i " + downloaded_audio_file + " -b:a 24k " + converted_audio_file)
             os.unlink (id + '.' + ext)
 
-            with open (converted_audio_file, 'rb') as f:
-                await bot.sendDocument (chat_id, f, caption=title, reply_to_message_id=msg['message_id'])
+            converted_file_size_in_mb = int(os.stat(converted_audio_file).st_size / (1024 * 1024))
+            if converted_file_size_in_mb > 50:
+                await bot.sendMessage (chat_id, "Sorry I can't upload this audio it is too big, Telegram supporting only 50mb, the converted file size is " + str(converted_file_size_in_mb) + "mb")
+            else:
+                with open (converted_audio_file, 'rb') as f:
+                    await bot.sendDocument (chat_id, f, caption=title, reply_to_message_id=msg['message_id'])
 
             os.unlink (converted_audio_file)
 
